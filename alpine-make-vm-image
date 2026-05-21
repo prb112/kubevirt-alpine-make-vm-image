@@ -120,7 +120,7 @@ readonly VIRTUAL_PKG=".make-$PROGNAME"
 # An opaque string used to detect changes in resolv.conf.
 readonly RESOLVCONF_MARK="### created by $PROGNAME ###"
 
-# Alpine APK keys for verification of packages for x86_64, aarch64 and s390x.
+# Alpine APK keys for verification of packages for x86_64, aarch64, ppc64le and s390x.
 readonly ALPINE_KEYS='
 4a6a0840:MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA1yHJxQgsHQREclQu4Ohe\nqxTxd1tHcNnvnQTu/UrTky8wWvgXT+jpveroeWWnzmsYlDI93eLI2ORakxb3gA2O\nQ0Ry4ws8vhaxLQGC74uQR5+/yYrLuTKydFzuPaS1dK19qJPXB8GMdmFOijnXX4SA\njixuHLe1WW7kZVtjL7nufvpXkWBGjsfrvskdNA/5MfxAeBbqPgaq0QMEfxMAn6/R\nL5kNepi/Vr4S39Xvf2DzWkTLEK8pcnjNkt9/aafhWqFVW7m3HCAII6h/qlQNQKSo\nGuH34Q8GsFG30izUENV9avY7hSLq7nggsvknlNBZtFUcmGoQrtx3FmyYsIC8/R+B\nywIDAQAB
 5261cecb:MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAwlzMkl7b5PBdfMzGdCT0\ncGloRr5xGgVmsdq5EtJvFkFAiN8Ac9MCFy/vAFmS8/7ZaGOXoCDWbYVLTLOO2qtX\nyHRl+7fJVh2N6qrDDFPmdgCi8NaE+3rITWXGrrQ1spJ0B6HIzTDNEjRKnD4xyg4j\ng01FMcJTU6E+V2JBY45CKN9dWr1JDM/nei/Pf0byBJlMp/mSSfjodykmz4Oe13xB\nCa1WTwgFykKYthoLGYrmo+LKIGpMoeEbY1kuUe04UiDe47l6Oggwnl+8XD1MeRWY\nsWgj8sF4dTcSfCMavK4zHRFFQbGp/YFJ/Ww6U9lA3Vq0wyEI6MCMQnoSMFwrbgZw\nwwIDAQAB
@@ -137,8 +137,8 @@ readonly HOST_ARCH="$(uname -m)"
 case "$HOST_ARCH" in
 	aarch64) : ${APK_TOOLS_SHA256:="e471d35aa221d031abe9b6288aede12a8e9f1a398954e5a2e1d1bce1727b4ef4"};;
 	x86_64) : ${APK_TOOLS_SHA256:="34bb1a96f0258982377a289392d4ea9f3f4b767a4bb5806b1b87179b79ad8a1c"};;
+	ppc64le)  : ${APK_TOOLS_SHA256:="66c8af649d8196071e7f02b93dc2cfe82e50d419edb24711ddc6f6509ca9345b"};;
 	s390x)  : ${APK_TOOLS_SHA256:="6880a5f5e7f62e1f4c47ad3a75d699f9b1f99f3f20f9f8be01637bef1012b8e7"};;
-	
 esac
 
 : ${APK_TOOLS_URI:="https://gitlab.alpinelinux.org/api/v4/projects/5/packages/generic/v2.14.10/$HOST_ARCH/apk.static"}
@@ -607,6 +607,13 @@ else
      # On s390x, cloud-init packages are not included in stable Alpine branches (v3.x).
      # They are available only in the edge branch under the community repository.
      if [ "$ARCH" = "s390x" ]; then
+        echo "$ALPINE_MIRROR/edge/main" >> etc/apk/repositories
+        echo "$ALPINE_MIRROR/edge/community" >> etc/apk/repositories
+     fi
+
+     # On ppc64le, cloud-init packages are not included in stable Alpine branches (v3.x).
+     # They are available only in the edge branch under the community repository.
+     if [ "$ARCH" = "ppc64le" ]; then
         echo "$ALPINE_MIRROR/edge/main" >> etc/apk/repositories
         echo "$ALPINE_MIRROR/edge/community" >> etc/apk/repositories
      fi
