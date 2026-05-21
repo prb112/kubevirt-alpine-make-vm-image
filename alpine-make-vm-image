@@ -432,7 +432,7 @@ while [ $# -gt 0 ]; do
 done
 
 : ${ALPINE_BRANCH:="latest-stable"}
-: ${ALPINE_MIRROR:="http://dl-cdn.alpinelinux.org/alpine"}
+: ${ALPINE_MIRROR:="https://dl-cdn.alpinelinux.org/alpine"}
 : ${ARCH:=}
 : ${CLEANUP:="yes"}
 : ${FS_SKEL_CHOWN:=}
